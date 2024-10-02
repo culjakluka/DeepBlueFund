@@ -1,3 +1,9 @@
+const ProjectStatus = {
+  ACTIVE: 0,
+  UPCOMING: 1,
+  FINISHED: 2,
+};
+
 const seaCleaningProjects = [
   {
     id: 1,
@@ -216,3 +222,5 @@ const seaCleaningProjects = [
     status: ProjectStatus.UPCOMING,
   },
 ];
+
+export { seaCleaningProjects, ProjectStatus };
