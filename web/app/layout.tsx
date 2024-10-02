@@ -22,11 +22,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
+      <body className='dark'>
         <ReactQueryProvider>
           <ClusterProvider>
             <SolanaProvider>
-              <UiLayout links={links}>{children}</UiLayout>
+              <UiLayout links={links}>{children} </UiLayout>
             </SolanaProvider>
           </ClusterProvider>
         </ReactQueryProvider>

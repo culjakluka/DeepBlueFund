@@ -15,7 +15,12 @@
       {
         "name": "next"
       }
-    ]
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./*"],
+      "@deep-blue-fund/*": ["./libs/deep-blue-fund/*"]
+    },
   },
   "include": [
     "**/*.ts",

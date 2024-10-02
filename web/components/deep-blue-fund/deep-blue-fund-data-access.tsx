@@ -3,7 +3,7 @@
 import {
   getDeepBlueFundProgram,
   getDeepBlueFundProgramId,
-} from '@deep-blue-fund/anchor';
+} from '../../../anchor/src/deep-blue-fund-exports';
 import { Program } from '@coral-xyz/anchor';
 import { useConnection } from '@solana/wallet-adapter-react';
 import { Cluster, Keypair } from '@solana/web3.js';
