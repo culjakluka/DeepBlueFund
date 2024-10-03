@@ -13,7 +13,7 @@ import {
 
 export default function DeepBlueFundTable() {
   return (
-    <div className='overflow-x-auto'>
+    <div className='overflow-x-auto bg-foreground'>
       <Table>
         <TableHeader>
           <TableRow>
