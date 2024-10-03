@@ -10,24 +10,10 @@ import DeepBlueFundTable from './deep-blue-fund-table';
 
 export default function DeepBlueFundFeature() {
   const { publicKey } = useWallet();
-  const { programId } = useDeepBlueFundProgram();
 
   return publicKey ? (
     <div>
-      <AppHero
-        title='DeepBlueFund'
-        subtitle={'Run the program by clicking the "Run program" button.'}
-      >
-        <p className='mb-6'>
-          <ExplorerLink
-            path={`account/${programId}`}
-            label={ellipsify(programId.toString())}
-          />
-        </p>
-        <DeepBlueFundCreate />
-        <DeepBlueFundTable />
-      </AppHero>
-      <DeepBlueFundProgram />
+      <DeepBlueFundTable />
     </div>
   ) : (
     <div className='max-w-4xl mx-auto'>
