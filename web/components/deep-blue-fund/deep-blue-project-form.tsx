@@ -138,7 +138,7 @@ export default function DeepBlueProjectForm() {
                 </PopoverTrigger>
                 <PopoverContent className='w-auto p-0' align='start'>
                   <Calendar
-                    className='calendar-grid'
+                    className='text-white bg-blackbg'
                     mode='single'
                     selected={field.value ?? new Date()}
                     onSelect={(date) =>

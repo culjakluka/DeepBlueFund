@@ -8,6 +8,7 @@ import { useDeepBlueFundProgram } from './deep-blue-fund-data-access';
 import { DeepBlueFundCreate, DeepBlueFundProgram } from './deep-blue-fund-ui';
 import DeepBlueFundTable from './deep-blue-fund-table';
 import DeepBlueProjectForm from './deep-blue-project-form';
+import { Sheet } from '../shadcn/Sheet';
 
 export default function DeepBlueFundFeature() {
   const { publicKey } = useWallet();
