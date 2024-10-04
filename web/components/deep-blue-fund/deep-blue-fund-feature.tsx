@@ -7,6 +7,7 @@ import { AppHero, ellipsify } from '../ui/ui-layout';
 import { useDeepBlueFundProgram } from './deep-blue-fund-data-access';
 import { DeepBlueFundCreate, DeepBlueFundProgram } from './deep-blue-fund-ui';
 import DeepBlueFundTable from './deep-blue-fund-table';
+import DeepBlueProjectForm from './deep-blue-project-form';
 
 export default function DeepBlueFundFeature() {
   const { publicKey } = useWallet();
@@ -14,6 +15,7 @@ export default function DeepBlueFundFeature() {
   return publicKey ? (
     <div>
       <DeepBlueFundTable />
+      <DeepBlueProjectForm />
     </div>
   ) : (
     <div className='max-w-4xl mx-auto'>

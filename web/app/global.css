@@ -8,16 +8,35 @@ body {
 }
 
 .wallet-adapter-button-trigger {
-  background: rgb(100, 26, 230) !important;
+  background: #09090b !important;
   border-radius: 8px !important;
   padding-left: 16px !important;
   padding-right: 16px !important;
+  border: 1px solid white !important;
 }
 .wallet-adapter-dropdown-list,
 .wallet-adapter-button {
   font-family: inherit !important;
 }
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(
+    7,
+    1fr
+  ); /* 7 equal columns for days and dates */
+}
 
+.weekdays {
+  display: contents; /* Ensure that the weekdays and dates share the same grid structure */
+}
+
+.calendar-grid .weekday {
+  text-align: center; /* Center the weekday names above the dates */
+}
+
+.calendar-grid .date {
+  text-align: center; /* Align the dates to match the weekday */
+}
 
 @layer base {
   :root {
@@ -76,13 +95,12 @@ body {
   }
 }
 
- 
 @layer base {
   * {
     @apply border-border;
   }
   body {
     @apply bg-background text-foreground;
-    font-feature-settings: "rlig" 1, "calt" 1;
+    font-feature-settings: 'rlig' 1, 'calt' 1;
   }
 }
