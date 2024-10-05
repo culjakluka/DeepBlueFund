@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import { format } from 'date-fns';
 import { CalendarIcon } from 'lucide-react';
 import { cn } from '../../lib/utils';
+import { createRecord } from '../../app/services/pocketBaseServices';
 
 import {
   Form,
@@ -18,6 +19,8 @@ import { Input } from '../shadcn/Input';
 import { Button } from '../shadcn/Button';
 import { Popover, PopoverContent, PopoverTrigger } from '../shadcn/Popover';
 import { Calendar } from '../shadcn/Calendar';
+import { useWallet } from '@solana/wallet-adapter-react';
+import { useEffect } from 'react';
 
 const formSchema = z.object({
   locationName: z.string().min(3).max(30),
@@ -28,17 +31,36 @@ const formSchema = z.object({
   // })
   fundingGoal: z.number().min(0).max(1000000),
   projectOwner: z.string().min(3).max(30),
+  ownerWalletPublicKey: z.string().min(3).max(100),
 });
 
 export default function DeepBlueProjectForm() {
+  const wallet = useWallet();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      ownerWalletPublicKey: wallet.publicKey ? wallet.publicKey.toString() : '', // converting to string
+    },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  useEffect(() => {
+    if (wallet.publicKey) {
+      form.setValue('ownerWalletPublicKey', wallet.publicKey.toString());
+    }
+  }, [wallet.publicKey]);
+
+  const onSubmit = async (
+    values: z.infer<typeof formSchema>
+  ): Promise<void> => {
     console.log(values);
-    //TODO: send to db
-  }
+    try {
+      const newRecord = await createRecord('seaCleaningProjects', values);
+      console.log('Record created:', newRecord);
+    } catch (error) {
+      console.error('Error creating record:', error);
+    }
+  };
 
   return (
     <Form {...form}>
