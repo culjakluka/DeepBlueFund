@@ -32,6 +32,7 @@ interface DeepBlueFundTableProps {
 export default function DeepBlueFundTable({ projects }: DeepBlueFundTableProps) {
   const router = useRouter();
   const [selectedStatus, setSelectedStatus] = useState<string>('All');
+  const [isSheetOpen, setIsSheetOpen] = useState<boolean>(false);
 
   const handleRowClick = (projectId: number) => {
     router.push(`/deep-blue-fund/project/${projectId}`);
@@ -61,18 +62,22 @@ export default function DeepBlueFundTable({ projects }: DeepBlueFundTableProps) 
     return `${timePart}, ${datePart}`;
   };
 
+  const handleFormSuccess = () => {
+    setIsSheetOpen(false);
+  };
+
   return (
     <div className='p-8  mt-24'>
       <div className='mb-12 flex justify-between items-center'>
         <h1 className='text-3xl font-bold'>Deep Blue Fund Projects</h1>
-        <Sheet>
+        <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
           <SheetTrigger asChild>
             <Button className='text-lg bg-black-bg border-2 hover:bg-white hover:text-black'>
               Add New Project
             </Button>
           </SheetTrigger>
           <SheetContent>
-            <DeepBlueProjectForm />
+            <DeepBlueProjectForm onSuccess={handleFormSuccess}/>
           </SheetContent>
         </Sheet>
         <select

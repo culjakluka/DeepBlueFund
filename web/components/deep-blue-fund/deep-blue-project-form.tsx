@@ -37,7 +37,7 @@ const formSchema = z.object({
   ownerWalletPublicKey: z.string().min(3).max(100),
 });
 
-export default function DeepBlueProjectForm() {
+export default function DeepBlueProjectForm({ onSuccess }: {onSuccess: () => void}) {
   const wallet = useWallet();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -71,7 +71,7 @@ export default function DeepBlueProjectForm() {
         projectDescription: '',
         ownerWalletPublicKey: wallet.publicKey ? wallet.publicKey.toString() : '', // Reset to wallet's public key if available
       });
-
+      onSuccess();
       console.log('Record created:', newRecord);
     } catch (error) {
       toast.error('Error submitting project', { id: toastId });
