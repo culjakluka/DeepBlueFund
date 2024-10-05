@@ -1,15 +1,17 @@
 'use client';
 
 import { WalletButton } from '../solana/solana-provider';
+import { useWallet } from '@solana/wallet-adapter-react';
 import * as React from 'react';
-import { ReactNode, Suspense, useEffect, useRef } from 'react';
+import { ReactNode, Suspense, useEffect, useRef, useState } from 'react';
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { AccountChecker } from '../account/account-ui';
+import { getRecordByField , createRecord} from '../../app/services/pocketBaseServices';
 import {
   ClusterChecker,
-  ClusterUiSelect,
+  ClusterUiSelect,  
   ExplorerLink,
 } from '../cluster/cluster-ui';
 import toast, { Toaster } from 'react-hot-toast';
@@ -23,6 +25,38 @@ export function UiLayout({
   links: { label: string; path: string }[];
 }) {
   const pathname = usePathname();
+  const wallet = useWallet();
+
+  useEffect(() => {
+    const registerUser = async () => {
+      if (wallet.connected && wallet.publicKey) {
+        const walletAddress = wallet.publicKey.toBase58();
+  
+        try {
+          const existingUser = await getRecordByField('user', 'walletPublicKey', walletAddress);
+          console.log(existingUser)
+          if (!existingUser) {
+            const newUser = {
+              walletPublicKey: walletAddress,
+              isAdmin: true,
+            };
+  
+            await createRecord('user', newUser);
+            console.log('User registered:', newUser);
+          } else {
+            console.log('User already exists:', existingUser);
+          }
+        } catch (error) {
+          console.error('Error during user registration:', error);
+        }
+      } else {
+        console.log('Wallet not connected or publicKey not available.');
+      }
+    };
+  
+    registerUser();
+  }, [wallet]);
+  
 
   return (
     <div className='h-full flex flex-col'>

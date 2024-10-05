@@ -50,3 +50,15 @@ export const getRecordByField = async (collection, field, value) => {
     throw new Error(`Error fetching record: ${error}`);
   }
 };
+
+export async function getAdminStatus(walletAddress) {
+  try {
+    const user = await client
+      .collection('users')
+      .getFirstListItem(`walletAddress="${walletAddress}"`);
+    return user.isAdmin === true;
+  } catch (error) {
+    console.error('Error fetching admin status:', error);
+    return false;
+  }
+}
