@@ -22,6 +22,7 @@ import {
 import { Input } from '../shadcn/Input';
 import { Button } from '../shadcn/Button';
 import { Popover, PopoverContent, PopoverTrigger } from '../shadcn/Popover';
+import { toast } from 'react-hot-toast'; 
 
 const formSchema = z.object({
   locationName: z.string().min(3).max(30),
@@ -42,7 +43,7 @@ export default function DeepBlueProjectForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      ownerWalletPublicKey: wallet.publicKey ? wallet.publicKey.toString() : '', // converting to string
+      ownerWalletPublicKey: wallet.publicKey ? wallet.publicKey.toString() : '',
     },
   });
 
@@ -55,15 +56,25 @@ export default function DeepBlueProjectForm() {
   const onSubmit = async (
     values: z.infer<typeof formSchema>
   ): Promise<void> => {
-    console.log(values);
+    const toastId = toast.loading('Submitting your project...');
     try {
       const newRecord = await createRecord('seaCleaningProjects', values);
-      const newUser = await createRecord('user', {
-        walletPublicKey: values.ownerWalletPublicKey,
-        isAdmin: true,
+
+      toast.success('Project submitted successfully!', { id: toastId });
+
+      form.reset({
+        locationName: '',
+        startDate: undefined,
+        endDate: undefined,
+        fundingGoal: 0,
+        projectOwner: '',
+        projectDescription: '',
+        ownerWalletPublicKey: wallet.publicKey ? wallet.publicKey.toString() : '', // Reset to wallet's public key if available
       });
+
       console.log('Record created:', newRecord);
     } catch (error) {
+      toast.error('Error submitting project', { id: toastId });
       console.error('Error creating record:', error);
     }
   };
