@@ -56,6 +56,10 @@ export default function DeepBlueProjectForm() {
     console.log(values);
     try {
       const newRecord = await createRecord('seaCleaningProjects', values);
+      const newUser = await createRecord('user', {
+        walletPublicKey: values.ownerWalletPublicKey,
+        isAdmin: true,
+      });
       console.log('Record created:', newRecord);
     } catch (error) {
       console.error('Error creating record:', error);
