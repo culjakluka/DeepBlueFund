@@ -104,3 +104,27 @@ body {
     font-feature-settings: 'rlig' 1, 'calt' 1;
   }
 }
+
+/* For Webkit-based browsers (Chrome, Safari, Edge) */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px; /* Width of the scrollbar */
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background-color: #1a1a1a; /* Background of the scrollbar track */
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #3b82f6; /* Always blue scrollbar thumb */
+  border-radius: 8px; /* Rounded corners on the scrollbar */
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: #2563eb; /* Darker blue on hover */
+}
+
+/* For Firefox */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #3b82f6 #1a1a1a; /* Blue thumb, dark track */
+}

@@ -1,6 +1,6 @@
 'use client';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { seaCleaningProjects } from '../../data/seaCleaningProjects';
 import {
   Table,
   TableHeader,
@@ -9,9 +9,27 @@ import {
   TableCell,
   TableHead,
 } from '../shadcn/Table';
-import { useRouter } from 'next/navigation';
+import { Sheet, SheetContent, SheetTrigger } from '../shadcn/Sheet';
+import { Button } from '../shadcn/Button'; 
+import DeepBlueProjectForm from './deep-blue-project-form';
 
-export default function DeepBlueFundTable() {
+export interface Project {
+  id: number;
+  projectOwner: string;
+  status: number;
+  fundingGoal: number;
+  startDate: string;
+  endDate: string;
+  locationName: string;
+  description: string;
+  ownerWalletPublicKey: string;
+}
+
+interface DeepBlueFundTableProps {
+  projects: Project[];
+}
+
+export default function DeepBlueFundTable({ projects }: DeepBlueFundTableProps) {
   const router = useRouter();
   const [selectedStatus, setSelectedStatus] = useState<string>('All');
 
@@ -23,7 +41,7 @@ export default function DeepBlueFundTable() {
     setSelectedStatus(e.target.value);
   };
 
-  const filteredProjects = seaCleaningProjects.filter((project) => {
+  const filteredProjects = projects.filter((project: Project) => {
     if (selectedStatus === 'All') return true;
     if (selectedStatus === 'Active' && project.status === 0) return true;
     if (selectedStatus === 'Upcoming' && project.status === 1) return true;
@@ -31,14 +49,32 @@ export default function DeepBlueFundTable() {
     return false;
   });
 
-  const sortedProjects = [...filteredProjects].sort(
-    (a, b) => b.fundingGoal - a.fundingGoal
-  );
+  const sortedProjects = filteredProjects.sort((a, b) => b.fundingGoal - a.fundingGoal);
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    const timePart = date.toLocaleTimeString('en-GB', {
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+    const datePart = date.toLocaleDateString('en-CA'); // Formats as 'YYYY-MM-DD'
+    return `${timePart}, ${datePart}`;
+  };
 
   return (
-    <div className='p-8 border-[1px] rounded-lg'>
-      <div className='mb-4 flex justify-between items-center'>
-        <h1 className='text-3xl font-bold'>Projects</h1>
+    <div className='p-8  mt-24'>
+      <div className='mb-12 flex justify-between items-center'>
+        <h1 className='text-3xl font-bold'>Deep Blue Fund Projects</h1>
+        <Sheet>
+          <SheetTrigger asChild>
+            <Button className='text-lg bg-black-bg border-2 hover:bg-white hover:text-black'>
+              Add New Project
+            </Button>
+          </SheetTrigger>
+          <SheetContent>
+            <DeepBlueProjectForm />
+          </SheetContent>
+        </Sheet>
         <select
           value={selectedStatus}
           onChange={handleStatusChange}
@@ -51,7 +87,7 @@ export default function DeepBlueFundTable() {
         </select>
       </div>
 
-      <div className='overflow-x-auto bg-foreground border-[1px] rounded-lg'>
+      <div className='overflow-x-auto bg-foreground border-[1px] rounded-3xl'>
         <Table>
           <TableHeader>
             <TableRow>
@@ -64,34 +100,42 @@ export default function DeepBlueFundTable() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {sortedProjects.map((project) => (
-              <TableRow
-                key={project.id}
-                onClick={() => handleRowClick(project.id)}
-                className='cursor-pointer hover:bg-gray-100'
-              >
-                <TableCell className='text-lg'>
-                  {project.projectOwner}
-                </TableCell>
-                <TableCell className='text-lg'>
-                  {project.locationName}
-                </TableCell>
-                <TableCell className='text-lg'>
-                  {project.status === 0
-                    ? 'Active'
-                    : project.status === 1
-                    ? 'Upcoming'
-                    : project.status === 2
-                    ? 'Finished'
-                    : 'Unknown'}
-                </TableCell>
-                <TableCell className='text-lg'>{project.startDate}</TableCell>
-                <TableCell className='text-lg'>{project.endDate}</TableCell>
-                <TableCell className='text-lg'>
-                  ${project.fundingGoal.toLocaleString()}
+            {sortedProjects.length > 0 ? (
+              sortedProjects.map((project: Project) => (
+                <TableRow
+                  key={project.id}
+                  onClick={() => handleRowClick(project.id)}
+                  className='cursor-pointer'
+                >
+                  <TableCell className='text-lg'>
+                    {project.projectOwner}
+                  </TableCell>
+                  <TableCell className='text-lg'>
+                    {project.locationName}
+                  </TableCell>
+                  <TableCell className='text-lg'>
+                    {project.status === 0
+                      ? 'Active'
+                      : project.status === 1
+                      ? 'Upcoming'
+                      : project.status === 2
+                      ? 'Finished'
+                      : 'Unknown'}
+                  </TableCell>
+                  <TableCell className='text-lg'>{formatDate(project.startDate)}</TableCell>
+                  <TableCell className='text-lg'>{formatDate(project.endDate)}</TableCell>
+                  <TableCell className='text-lg'>
+                    ${project.fundingGoal.toLocaleString()}
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={6} className='text-center text-lg'>
+                  No projects match the filter.
                 </TableCell>
               </TableRow>
-            ))}
+            )}
           </TableBody>
         </Table>
       </div>
