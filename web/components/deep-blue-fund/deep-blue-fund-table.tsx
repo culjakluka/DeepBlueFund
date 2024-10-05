@@ -1,6 +1,7 @@
 'use client';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useWallet } from '@solana/wallet-adapter-react';
 import {
   Table,
   TableHeader,
@@ -12,6 +13,7 @@ import {
 import { Sheet, SheetContent, SheetTrigger } from '../shadcn/Sheet';
 import { Button } from '../shadcn/Button'; 
 import DeepBlueProjectForm from './deep-blue-project-form';
+import { getRecordByField } from '@/app/services/pocketBaseServices';
 
 export interface Project {
   id: number;
@@ -31,8 +33,29 @@ interface DeepBlueFundTableProps {
 
 export default function DeepBlueFundTable({ projects }: DeepBlueFundTableProps) {
   const router = useRouter();
+  const { publicKey } = useWallet();
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [loaded, setLoaded] = useState(false); 
   const [selectedStatus, setSelectedStatus] = useState<string>('All');
   const [isSheetOpen, setIsSheetOpen] = useState<boolean>(false);
+
+  useEffect(() => {
+    const checkAdminStatus = async () => {
+      if (publicKey) {
+        try {
+          const userRecord = await getRecordByField('user', 'walletPublicKey', publicKey.toString());
+          if (userRecord && userRecord.isAdmin) {
+            setIsAdmin(true);
+          }
+        } catch (error) {
+          console.error('Error fetching user data:', error);
+        }
+      }
+      setLoaded(true);
+    };
+
+    checkAdminStatus();
+  }, [publicKey]);
 
   const handleRowClick = (projectId: number) => {
     router.push(`/deep-blue-fund/project/${projectId}`);
@@ -70,16 +93,20 @@ export default function DeepBlueFundTable({ projects }: DeepBlueFundTableProps) 
     <div className='p-8  mt-24'>
       <div className='mb-12 flex justify-between items-center'>
         <h1 className='text-3xl font-bold'>Deep Blue Fund Projects</h1>
-        <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
-          <SheetTrigger asChild>
-            <Button className='text-lg bg-black-bg border-2 hover:bg-white hover:text-black'>
-              Add New Project
-            </Button>
-          </SheetTrigger>
-          <SheetContent>
-            <DeepBlueProjectForm onSuccess={handleFormSuccess}/>
-          </SheetContent>
-        </Sheet>
+        {loaded && isAdmin && (
+          <div className="transition-opacity opacity-0 animate-fade-in-up">
+            <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
+              <SheetTrigger asChild>
+                <Button className='text-lg bg-black-bg border-2 hover:bg-white hover:text-black'>
+                  Add New Project
+                </Button>
+              </SheetTrigger>
+              <SheetContent>
+                <DeepBlueProjectForm onSuccess={handleFormSuccess} />
+              </SheetContent>
+            </Sheet>
+          </div>
+        )}
         <select
           value={selectedStatus}
           onChange={handleStatusChange}

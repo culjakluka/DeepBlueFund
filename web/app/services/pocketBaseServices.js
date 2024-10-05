@@ -39,3 +39,14 @@ export async function deleteRecord(collection, id) {
     throw error;
   }
 }
+
+export const getRecordByField = async (collection, field, value) => {
+  try {
+    const record = await client
+      .collection(collection)
+      .getFirstListItem(`${field}="${value}"`);
+    return record;
+  } catch (error) {
+    throw new Error(`Error fetching record: ${error}`);
+  }
+};
