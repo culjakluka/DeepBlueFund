@@ -38,6 +38,10 @@ To use the Deep Blue Fund application, follow these steps:
 
 5. **Monitor Your Contributions**: Keep track of your donations and the projects you support through your wallet.
 
+6. **Create Your own Sea Cleaning Initiative**: Apply your sea cleaning project to the project list by clicking the "Add new project" button (only admins are allowed to create projects, and currently all new collected wallets will be added as new admin users)
+
+![Usage Screenshot](assets/donation_screenshot.png)
+
 Feel free to explore the projects and make a difference in your community!
 
 ## Getting Started

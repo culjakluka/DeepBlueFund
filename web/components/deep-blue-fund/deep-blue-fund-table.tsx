@@ -154,8 +154,8 @@ export default function DeepBlueFundTable({ projects }: DeepBlueFundTableProps) 
                       ? 'Finished'
                       : 'Unknown'}
                   </TableCell>
-                  <TableCell className='text-lg'>{formatDate(project.startDate)}</TableCell>
-                  <TableCell className='text-lg'>{formatDate(project.endDate)}</TableCell>
+                  <TableCell className='text-lg'>{new Date(project.startDate).toLocaleDateString()}</TableCell>
+                  <TableCell className='text-lg'>{new Date(project.endDate).toLocaleDateString()}</TableCell>
                   <TableCell className='text-lg'>
                     ${project.fundingGoal.toLocaleString()}
                   </TableCell>
