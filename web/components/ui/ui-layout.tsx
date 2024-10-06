@@ -32,30 +32,28 @@ export function UiLayout({
       if (wallet.connected && wallet.publicKey) {
         const walletAddress = wallet.publicKey.toBase58();
   
+        let existingUser;
+
         try {
-          const existingUser = await getRecordByField('user', 'walletPublicKey', walletAddress);
+          existingUser = await getRecordByField('user', 'walletPublicKey', walletAddress);
+        
           console.log(existingUser)
-          if (!existingUser) {
-            const newUser = {
-              walletPublicKey: walletAddress,
-              isAdmin: true,
-            };
-  
-            await createRecord('user', newUser);
-            console.log('User registered:', newUser);
-          } else {
-            console.log('User already exists:', existingUser);
-          }
         } catch (error) {
-          console.error('Error during user registration:', error);
-        }
+          const newUser = {
+            walletPublicKey: walletAddress,
+            isAdmin: true,
+          };
+
+          if (!existingUser) await createRecord('user', newUser);
+          console.log('User registered:', newUser);
+      }
       } else {
         console.log('Wallet not connected or publicKey not available.');
       }
     };
   
     registerUser();
-  }, [wallet]);
+  }, [wallet.publicKey]);
   
 
   return (
