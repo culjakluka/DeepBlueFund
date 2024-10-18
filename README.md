@@ -46,6 +46,10 @@ Feel free to explore the projects and make a difference in your community!
 
 ## Getting Started
 
+### Deployment
+
+- Check out the app: https://deep-blue-fund.vercel.app/
+
 ### Prerequisites
 
 - Node v18.18.0 or higher
