@@ -2,6 +2,10 @@
 
 This project is generated with the [create-solana-dapp](https://github.com/solana-developers/create-solana-dapp) generator.
 
+## Deployment
+
+- Check out the app: https://deep-blue-fund.vercel.app/
+
 ## Project Overview
 
 **Deep Blue Fund** is a crowdfunding application built on the Solana blockchain, aimed at supporting local sea cleaning initiatives. It enables individuals and organizations to gather funds for environmental projects focused on preserving marine ecosystems.
@@ -45,10 +49,6 @@ To use the Deep Blue Fund application, follow these steps:
 Feel free to explore the projects and make a difference in your community!
 
 ## Getting Started
-
-### Deployment
-
-- Check out the app: https://deep-blue-fund.vercel.app/
 
 ### Prerequisites
 
